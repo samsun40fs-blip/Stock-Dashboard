@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "fear_greed": 50,
+    "fear_greed_label": "Neutral",
+    "total_found": 44,
+    "last_update": "26/04 17:42 น.",
+    "ny_time": "06:42 ET",
+    "market_status": "Pre-Market"
+  },
+  "stocks": [
+    {"rank":1,"sym":"CEVA","name":"CEVA Inc.","price":28.87,"chg":17.2,"vol":3.9,"score":79,"reddit":10,"twits":65,"rsi":92,"pre_chg":2.1,"pre_active":true,"sector":"Technology","analyst":"Strong Buy","signals":["Vol 3.9x","Reddit 10 HOT!","MACD Cross","BB Breakout","SEC 8-K","Bullish Options"],"opts":"Bullish P/C:0.05","entry_lo":28.29,"entry_hi":29.45,"stop":26.95,"risk":6.7,"t1":31.76,"t2":36.09,"t3":43.31,"t4":57.74},
+    {"rank":2,"sym":"MX","name":"Magnachip Semiconductor","price":5.25,"chg":23.0,"vol":7.4,"score":78,"reddit":20,"twits":50,"rsi":93,"pre_chg":5.3,"pre_active":true,"sector":"Technology","analyst":"N/A","signals":["Vol 7.4x ผิดปกติ","Reddit 20 HOT!","+23%!","SEC 8-K","Insider ซื้อ"],"opts":"Very Bullish P/C:0.00","entry_lo":5.14,"entry_hi":5.36,"stop":4.82,"risk":8.2,"t1":5.78,"t2":6.56,"t3":7.88,"t4":10.50},
+    {"rank":3,"sym":"PD","name":"PagerDuty Inc.","price":7.13,"chg":15.7,"vol":2.3,"score":76,"reddit":20,"twits":60,"rsi":57,"pre_chg":1.2,"pre_active":true,"sector":"Technology","analyst":"Buy","signals":["Reddit 20 HOT!","+15.7%","MACD Bull","ข่าวบวก"],"opts":"Bullish P/C:0.35","entry_lo":6.99,"entry_hi":7.27,"stop":6.47,"risk":9.2,"t1":7.84,"t2":8.91,"t3":10.70,"t4":14.26},
+    {"rank":4,"sym":"BOOM","name":"DMC Global Inc.","price":6.41,"chg":13.5,"vol":2.2,"score":71,"reddit":5,"twits":55,"rsi":73,"pre_chg":0,"pre_active":false,"sector":"Industrial","analyst":"N/A","signals":["Reddit 5 mentions","+13.5%","MACD Bull","BB Breakout"],"opts":"Neutral P/C:0.78","entry_lo":6.28,"entry_hi":6.54,"stop":5.97,"risk":6.9,"t1":7.05,"t2":8.01,"t3":9.62,"t4":12.82},
+    {"rank":5,"sym":"SXT","name":"Sensient Technologies","price":123.15,"chg":24.1,"vol":4.4,"score":66,"reddit":10,"twits":55,"rsi":83,"pre_chg":3.4,"pre_active":true,"sector":"Materials","analyst":"Buy","signals":["Vol 4.4x","+24%!","Reddit 10","Insider ซื้อ"],"opts":"Bullish P/C:0.42","entry_lo":120.69,"entry_hi":125.61,"stop":116.18,"risk":5.7,"t1":135.47,"t2":153.94,"t3":184.73,"t4":246.30},
+    {"rank":6,"sym":"APPF","name":"AppFolio Inc.","price":169.29,"chg":11.2,"vol":2.5,"score":65,"reddit":0,"twits":50,"rsi":59,"pre_chg":0,"pre_active":false,"sector":"Technology","analyst":"Strong Buy","signals":["+11.2%","Vol 2.5x","ข่าวบวกมาก","MACD Bull"],"opts":"Neutral P/C:0.91","entry_lo":165.90,"entry_hi":172.68,"stop":158.01,"risk":6.7,"t1":186.22,"t2":211.61,"t3":253.94,"t4":338.58},
+    {"rank":7,"sym":"SOUN","name":"SoundHound AI Inc.","price":8.19,"chg":4.7,"vol":1.1,"score":64,"reddit":8,"twits":60,"rsi":68,"pre_chg":0,"pre_active":false,"sector":"Technology","analyst":"Strong Buy","signals":["Reddit 8 mentions","ข่าวบวก","RSI OK","เงินไหลเข้า"],"opts":"Bullish P/C:0.45","entry_lo":8.03,"entry_hi":8.35,"stop":7.32,"risk":10.6,"t1":9.01,"t2":10.24,"t3":12.29,"t4":16.38},
+    {"rank":8,"sym":"MXL","name":"MaxLinear Inc.","price":60.32,"chg":76.1,"vol":7.7,"score":61,"reddit":0,"twits":50,"rsi":100,"pre_chg":8.2,"pre_active":true,"sector":"Technology","analyst":"Buy","signals":["Vol 7.7x INSANE!","+76%!!","ข่าวบวกมาก","BB Breakout"],"opts":"Neutral P/C:0.85","entry_lo":59.11,"entry_hi":61.53,"stop":54.02,"risk":10.4,"t1":66.35,"t2":75.40,"t3":90.48,"t4":120.64},
+    {"rank":9,"sym":"AMD","name":"Advanced Micro Devices","price":347.81,"chg":13.9,"vol":2.1,"score":61,"reddit":10,"twits":65,"rsi":97,"pre_chg":2.8,"pre_active":true,"sector":"Technology","analyst":"Buy","signals":["Reddit 10","Vol 2.1x","+13.9%","เหนือ MA"],"opts":"Bullish P/C:0.55","entry_lo":340.85,"entry_hi":354.77,"stop":327.18,"risk":5.9,"t1":382.59,"t2":434.76,"t3":521.72,"t4":695.62},
+    {"rank":10,"sym":"INTC","name":"Intel Corporation","price":82.54,"chg":23.6,"vol":2.3,"score":61,"reddit":5,"twits":55,"rsi":88,"pre_chg":1.5,"pre_active":true,"sector":"Technology","analyst":"Hold","signals":["Reddit 5 WSB HOT!","+23.6%","Vol 2.3x","SEC 8-K","Insider ซื้อ"],"opts":"Neutral P/C:0.91","entry_lo":80.89,"entry_hi":84.19,"stop":75.73,"risk":8.3,"t1":90.79,"t2":103.18,"t3":123.81,"t4":165.08}
+  ]
+}

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>God-Tier Stock Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f0f13;color:#e0e0e0;min-height:100vh}
+.top-bar{background:#1a1a24;border-bottom:1px solid #2a2a3a;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.top-title{font-size:15px;font-weight:600;color:#fff}
+.top-sub{font-size:11px;color:#888}
+.meta-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;padding:12px 16px}
+.meta-card{background:#1a1a24;border:1px solid #2a2a3a;border-radius:8px;padding:10px 12px}
+.meta-label{font-size:10px;color:#888;margin-bottom:3px}
+.meta-val{font-size:18px;font-weight:600;color:#fff}
+.meta-val.green{color:#4ade80}
+.meta-val.red{color:#f87171}
+.meta-val.amber{color:#fbbf24}
+.meta-sub{font-size:10px;color:#888;margin-top:2px}
+.table-wrap{padding:0 16px 16px}
+table{width:100%;border-collapse:collapse;font-size:12px;background:#1a1a24;border-radius:8px;overflow:hidden;border:1px solid #2a2a3a}
+thead th{background:#13131b;padding:8px 10px;text-align:left;font-size:10px;color:#888;font-weight:500;border-bottom:1px solid #2a2a3a;white-space:nowrap}
+tbody tr{border-bottom:1px solid #2a2a3a;cursor:pointer;transition:background 0.15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#22223a}
+tbody tr.sel{background:#1e2a4a;border-left:3px solid #4f9ef8}
+td{padding:8px 10px;white-space:nowrap}
+.sym{font-weight:700;color:#fff;font-size:13px}
+.pos{color:#4ade80;font-weight:600}
+.neg{color:#f87171;font-weight:600}
+.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600}
+.bg{background:#1e3a2a;color:#4ade80}
+.br{background:#3a1e1e;color:#f87171}
+.ba{background:#3a2e1e;color:#fbbf24}
+.bgr{background:#1e2a3a;color:#60a5fa}
+.bar-wrap{display:flex;align-items:center;gap:6px}
+.bar-bg{width:50px;height:4px;background:#2a2a3a;border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px}
+.detail{margin:0 16px 16px;background:#1a1a24;border:1px solid #2a2a3a;border-radius:8px;padding:16px;display:none}
+.d-header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.d-sym{font-size:22px;font-weight:700;color:#fff}
+.d-name{font-size:13px;color:#888}
+.d-price{font-size:22px;font-weight:700}
+.d-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:14px}
+.d-stat{background:#13131b;border-radius:6px;padding:8px 10px}
+.d-lbl{font-size:10px;color:#888;margin-bottom:2px}
+.d-val{font-size:13px;font-weight:600;color:#fff}
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:6px;margin-bottom:14px}
+.plan-item{background:#13131b;border-radius:6px;padding:8px 10px}
+.plan-lbl{font-size:10px;color:#888}
+.plan-val{font-size:13px;font-weight:600}
+.plan-val.en{color:#4ade80}
+.plan-val.st{color:#f87171}
+.plan-val.t1{color:#60a5fa}
+.plan-val.t4{color:#a78bfa}
+.sigs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px}
+.sig{padding:3px 8px;background:#13131b;border:1px solid #2a2a3a;border-radius:4px;font-size:10px;color:#aaa}
+.timing{display:flex;gap:8px;flex-wrap:wrap}
+.tim-badge{padding:4px 10px;background:#13131b;border:1px solid #2a2a3a;border-radius:4px;font-size:11px;color:#aaa}
+.sec-title{font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+.refresh-btn{padding:6px 14px;background:transparent;border:1px solid #3a3a4a;border-radius:6px;color:#aaa;cursor:pointer;font-size:12px}
+.refresh-btn:hover{background:#2a2a3a}
+.market-open{color:#4ade80}
+.market-closed{color:#f87171}
+.market-pre{color:#fbbf24}
+.chart-wrap{position:relative;height:140px;margin-top:14px}
+.loading{text-align:center;padding:40px;color:#888;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <div class="top-title">God-Tier Momentum Dashboard</div>
+    <div class="top-sub" id="last-update">กำลังโหลด...</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span id="market-badge" class="tim-badge">—</span>
+    <button class="refresh-btn" onclick="loadData()">รีเฟรช</button>
+  </div>
+</div>
+
+<div class="meta-row">
+  <div class="meta-card">
+    <div class="meta-label">Fear & Greed</div>
+    <div class="meta-val amber" id="fg-score">—</div>
+    <div class="meta-sub" id="fg-label">—</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">หุ้นน่าสนใจ</div>
+    <div class="meta-val" id="total-found">—</div>
+    <div class="meta-sub">ผ่านเกณฑ์วันนี้</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">เวลา NY</div>
+    <div class="meta-val" id="ny-time">—</div>
+    <div class="meta-sub" id="market-status">—</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">เวลาไทย</div>
+    <div class="meta-val" id="th-time">—</div>
+    <div class="meta-sub">Bangkok</div>
+  </div>
+  <div class="meta-card">
+    <div class="meta-label">อัปเดตถัดไป</div>
+    <div class="meta-val" id="countdown">5:00</div>
+    <div class="meta-sub">นาที</div>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>หุ้น</th>
+        <th>ราคา</th>
+        <th>เปลี่ยน</th>
+        <th>Vol</th>
+        <th>Score</th>
+        <th>Reddit</th>
+        <th>Options</th>
+        <th>RSI</th>
+        <th>Pre-mkt</th>
+        <th>สัญญาณหลัก</th>
+      </tr>
+    </thead>
+    <tbody id="stock-table"><tr><td colspan="11" class="loading">กำลังโหลดข้อมูล...</td></tr></tbody>
+  </table>
+</div>
+
+<div class="detail" id="detail-panel">
+  <div class="d-header">
+    <span class="d-sym" id="d-sym">—</span>
+    <span class="d-name" id="d-name">—</span>
+    <span class="d-price" id="d-price">—</span>
+    <span id="d-chg">—</span>
+  </div>
+
+  <div class="d-grid">
+    <div class="d-stat"><div class="d-lbl">Volume</div><div class="d-val" id="d-vol">—</div></div>
+    <div class="d-stat"><div class="d-lbl">Score</div><div class="d-val" id="d-score">—</div></div>
+    <div class="d-stat"><div class="d-lbl">Reddit</div><div class="d-val" id="d-reddit">—</div></div>
+    <div class="d-stat"><div class="d-lbl">StockTwits Bull%</div><div class="d-val" id="d-twits">—</div></div>
+    <div class="d-stat"><div class="d-lbl">RSI</div><div class="d-val" id="d-rsi">—</div></div>
+    <div class="d-stat"><div class="d-lbl">Pre-market</div><div class="d-val" id="d-pre">—</div></div>
+    <div class="d-stat"><div class="d-lbl">Sector</div><div class="d-val" id="d-sector">—</div></div>
+    <div class="d-stat"><div class="d-lbl">Analyst</div><div class="d-val" id="d-analyst">—</div></div>
+  </div>
+
+  <div class="sec-title">สัญญาณทั้งหมด</div>
+  <div class="sigs" id="d-signals"></div>
+
+  <div class="sec-title">แผนเทรด</div>
+  <div class="plan-grid">
+    <div class="plan-item"><div class="plan-lbl">เข้าต่ำ</div><div class="plan-val en" id="d-elo">—</div></div>
+    <div class="plan-item"><div class="plan-lbl">เข้าสูง</div><div class="plan-val en" id="d-ehi">—</div></div>
+    <div class="plan-item"><div class="plan-lbl">Stop Loss</div><div class="plan-val st" id="d-stop">—</div></div>
+    <div class="plan-item"><div class="plan-lbl">ความเสี่ยง</div><div class="plan-val st" id="d-risk">—</div></div>
+    <div class="plan-item"><div class="plan-lbl">T1 +10%</div><div class="plan-val t1" id="d-t1">—</div></div>
+    <div class="plan-item"><div class="plan-lbl">T2 +25%</div><div class="plan-val t1" id="d-t2">—</div></div>
+    <div class="plan-item"><div class="plan-lbl">T3 +50%</div><div class="plan-val t1" id="d-t3">—</div></div>
+    <div class="plan-item"><div class="plan-lbl">T4 +100%</div><div class="plan-val t4" id="d-t4">—</div></div>
+  </div>
+
+  <div class="timing" id="d-timing"></div>
+
+  <div class="chart-wrap">
+    <canvas id="d-chart" role="img" aria-label="Price targets chart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let stocks=[], selIdx=0, chart=null, cdSec=300;
+
+function scoreColor(s){return s>=75?'#f87171':s>=60?'#fbbf24':'#4ade80'}
+function barColor(s){return s>=75?'#f87171':s>=60?'#fbbf24':'#4ade80'}
+function optBadge(o){
+  if(!o||o.includes('ไม่มี')||o.includes('ETF')) return '<span class="badge bgr">N/A</span>';
+  if(o.includes('Very')||o.includes('VERY')) return '<span class="badge bg">VBull</span>';
+  if(o.includes('Bullish')) return '<span class="badge bg">Bull</span>';
+  if(o.includes('Bearish')) return '<span class="badge br">Bear</span>';
+  return '<span class="badge bgr">Neut</span>';
+}
+
+function renderTable(){
+  const tb=document.getElementById('stock-table');
+  if(!stocks.length){tb.innerHTML='<tr><td colspan="11" class="loading">ยังไม่มีข้อมูล รอบอทสแกนครับ...</td></tr>';return;}
+  tb.innerHTML=stocks.map((s,i)=>{
+    const sc=scoreColor(s.score), bc=barColor(s.score);
+    const cp=s.chg>=0?'pos':'neg', cs=s.chg>=0?'+':'';
+    const pre=s.pre_active?`<span class="${s.pre_chg>=5?'pos':s.pre_chg<=-5?'neg':''}">${s.pre_chg>=0?'+':''}${s.pre_chg.toFixed(1)}%</span>`:'<span style="color:#555">—</span>';
+    const sig=s.signals&&s.signals[0]||'';
+    return `<tr class="${i===selIdx?'sel':''}" onclick="selStock(${i})">
+      <td style="color:#555;font-size:11px">${s.rank}</td>
+      <td class="sym">${s.sym}</td>
+      <td>$${s.price.toFixed(2)}</td>
+      <td class="${cp}">${cs}${s.chg.toFixed(1)}%</td>
+      <td>${s.vol.toFixed(1)}x</td>
+      <td><div class="bar-wrap"><span style="font-size:12px;font-weight:600;color:${sc};min-width:26px">${s.score}</span><div class="bar-bg"><div class="bar-fill" style="width:${s.score}%;background:${bc}"></div></div></div></td>
+      <td>${s.reddit>0?`<span class="badge br">${s.reddit}x</span>`:'<span style="color:#555">0</span>'}</td>
+      <td>${optBadge(s.opts)}</td>
+      <td style="color:${s.rsi>80?'#f87171':s.rsi<40?'#4ade80':'#e0e0e0'}">${s.rsi}</td>
+      <td>${pre}</td>
+      <td style="color:#888;font-size:11px">${sig}</td>
+    </tr>`;
+  }).join('');
+}
+
+function selStock(i){
+  selIdx=i;
+  renderTable();
+  showDetail(stocks[i]);
+}
+
+function showDetail(s){
+  const p=document.getElementById('detail-panel');
+  p.style.display='block';
+  document.getElementById('d-sym').textContent=s.sym;
+  document.getElementById('d-name').textContent=s.name;
+  document.getElementById('d-price').textContent='$'+s.price.toFixed(2);
+  const ce=document.getElementById('d-chg');
+  ce.textContent=(s.chg>=0?'+':'')+s.chg.toFixed(1)+'%';
+  ce.className=s.chg>=0?'pos':'neg';
+  document.getElementById('d-vol').textContent=s.vol.toFixed(1)+'x';
+  document.getElementById('d-score').textContent=s.score+'/100';
+  document.getElementById('d-reddit').textContent=s.reddit+' mentions';
+  document.getElementById('d-twits').textContent=s.twits+'%';
+  document.getElementById('d-rsi').textContent=s.rsi;
+  document.getElementById('d-pre').textContent=s.pre_active?(s.pre_chg>=0?'+':'')+s.pre_chg.toFixed(1)+'%':'ไม่มีข้อมูล';
+  document.getElementById('d-sector').textContent=s.sector||'?';
+  document.getElementById('d-analyst').textContent=s.analyst||'N/A';
+  document.getElementById('d-elo').textContent='$'+s.entry_lo.toFixed(2);
+  document.getElementById('d-ehi').textContent='$'+s.entry_hi.toFixed(2);
+  document.getElementById('d-stop').textContent='$'+s.stop.toFixed(2);
+  document.getElementById('d-risk').textContent=s.risk.toFixed(1)+'%';
+  document.getElementById('d-t1').textContent='$'+s.t1.toFixed(2);
+  document.getElementById('d-t2').textContent='$'+s.t2.toFixed(2);
+  document.getElementById('d-t3').textContent='$'+s.t3.toFixed(2);
+  document.getElementById('d-t4').textContent='$'+s.t4.toFixed(2);
+  document.getElementById('d-signals').innerHTML=(s.signals||[]).map(sg=>`<span class="sig">${sg}</span>`).join('');
+
+  const now=new Date();
+  const nyH=((now.getUTCHours()-4)+24)%24+now.getUTCMinutes()/60;
+  let timing='',advice='';
+  if(nyH>=4&&nyH<9.5){timing='Pre-Market';advice='เตรียมเข้าตอน Open 20:30 ไทย';}
+  else if(nyH>=9.5&&nyH<10){timing='OPEN! วิ่งแรงสุด';advice='ช่วงทอง เข้าได้เลย!';}
+  else if(nyH>=10&&nyH<11){timing='Mid Morning';advice='ยังดี ระวัง Pullback';}
+  else if(nyH>=11&&nyH<14){timing='Lunch พักตัว';advice='รอ Power Hour 01:00 ไทย';}
+  else if(nyH>=14&&nyH<16){timing='POWER HOUR!';advice='ช่วงทอง Volume พุ่ง!';}
+  else{timing='After Hours/ปิด';advice='ดูข่าว เตรียมพรุ่งนี้';}
+  document.getElementById('d-timing').innerHTML=
+    `<span class="tim-badge">${timing}</span><span class="tim-badge">${advice}</span>`;
+
+  if(chart){chart.destroy();chart=null;}
+  chart=new Chart(document.getElementById('d-chart'),{
+    type:'bar',
+    data:{
+      labels:['Entry','T1 +10%','T2 +25%','T3 +50%','T4 +100%'],
+      datasets:[{label:'Target',data:[s.entry_lo,s.t1,s.t2,s.t3,s.t4],
+        backgroundColor:['#1e3a2a','#1a3050','#1e3870','#234090','#2a50b0'],
+        borderColor:['#4ade80','#60a5fa','#818cf8','#a78bfa','#c084fc'],
+        borderWidth:1,borderRadius:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{ticks:{callback:v=>'$'+v.toFixed(0),color:'#888'},grid:{color:'#2a2a3a'}},
+              x:{ticks:{color:'#888'},grid:{display:false}}}}
+  });
+}
+
+function updateClock(){
+  const now=new Date();
+  const th=new Date(now.getTime()+7*3600000);
+  const ny=new Date(now.getTime()-4*3600000);
+  document.getElementById('th-time').textContent=
+    th.getUTCHours().toString().padStart(2,'0')+':'+th.getUTCMinutes().toString().padStart(2,'0');
+  document.getElementById('ny-time').textContent=
+    ny.getUTCHours().toString().padStart(2,'0')+':'+ny.getUTCMinutes().toString().padStart(2,'0')+' ET';
+  const nyH=ny.getUTCHours()+ny.getUTCMinutes()/60;
+  let st='',cls='';
+  if(nyH>=9.5&&nyH<16){st='ตลาดเปิด';cls='market-open';}
+  else if((nyH>=4&&nyH<9.5)||(nyH>=16&&nyH<20)){st='Pre/After Hours';cls='market-pre';}
+  else{st='ตลาดปิด';cls='market-closed';}
+  document.getElementById('market-status').textContent=st;
+  document.getElementById('market-badge').textContent=st;
+  document.getElementById('market-badge').className='tim-badge '+cls;
+  cdSec--;
+  if(cdSec<=0){cdSec=300;loadData();}
+  const m=Math.floor(cdSec/60),s=cdSec%60;
+  document.getElementById('countdown').textContent=m+':'+s.toString().padStart(2,'0');
+}
+
+async function loadData(){
+  try{
+    const r=await fetch('/data');
+    const d=await r.json();
+    stocks=d.stocks||[];
+    const m=d.meta||{};
+    document.getElementById('fg-score').textContent=m.fear_greed||50;
+    document.getElementById('fg-label').textContent=m.fear_greed_label||'Neutral';
+    document.getElementById('total-found').textContent=m.total_found||0;
+    document.getElementById('last-update').textContent='อัปเดต: '+(m.last_update||'—');
+    cdSec=300;
+    renderTable();
+    if(stocks.length>0) showDetail(stocks[selIdx]||stocks[0]);
+  }catch(e){
+    document.getElementById('last-update').textContent='Error: '+e.message;
+  }
+}
+
+setInterval(updateClock,1000);
+updateClock();
+loadData();
+</script>
+</body>
+</html>
